@@ -22,7 +22,7 @@ export default function Home() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Fade in after loader
+  // Fade after loader
   useEffect(() => {
     if (!loading) {
       const t = setTimeout(() => setPageReady(true), 150);
@@ -95,48 +95,23 @@ export default function Home() {
         style={{ backgroundImage: "url('/bg.jpg')" }}
       />
 
-      {/* ================= NAV ================= */}
+      {/* ================= NAV (ONLY LOGO) ================= */}
       <div className="fixed top-0 left-0 w-full flex items-center justify-between px-6 md:px-10 py-6 z-20">
 
-        {/* LOGO (ALIGNED + HOVER) */}
-        <div className="flex items-center">
-          <div
-            onClick={() => scrollToSection(0)}
-            className="cursor-pointer group"
-          >
-            <div className="w-10 md:w-14">
-              <Image
-                src="/logo.png"
-                alt="logo"
-                width={500}
-                height={500}
-                className="w-full h-auto opacity-90 transition-all duration-300 ease-out group-hover:opacity-100 group-hover:scale-[1.04]"
-                priority
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* DESKTOP NAV */}
-        <div className="hidden md:flex gap-10 text-[11px] tracking-[0.25em] opacity-60">
-          {["ABOUT", "VENTURES", "CONNECT"].map((item, i) => (
-            <span
-              key={i}
-              onClick={() => scrollToSection(i + 1)}
-              className="cursor-pointer transition-all duration-300 hover:opacity-100 hover:tracking-[0.3em]"
-            >
-              {item}
-            </span>
-          ))}
-        </div>
-
-        {/* MOBILE */}
         <div
-          onClick={() => scrollToSection((section + 1) % 4)}
-          className="md:hidden flex flex-col gap-[4px] cursor-pointer opacity-80"
+          onClick={() => scrollToSection(0)}
+          className="cursor-pointer group"
         >
-          <span className="w-6 h-[1px] bg-white"></span>
-          <span className="w-6 h-[1px] bg-white"></span>
+          <div className="w-10 md:w-14">
+            <Image
+              src="/logo.png"
+              alt="logo"
+              width={500}
+              height={500}
+              className="w-full h-auto opacity-90 transition-all duration-300 ease-out group-hover:opacity-100 group-hover:scale-[1.04]"
+              priority
+            />
+          </div>
         </div>
 
       </div>
@@ -184,9 +159,7 @@ export default function Home() {
       {/* ================= RIGHT NAV ================= */}
       <div className="hidden md:flex fixed right-10 top-1/2 -translate-y-1/2 z-20 items-center gap-6">
 
-        {/* LINE */}
         <div className="relative h-64 flex flex-col justify-between items-center">
-
           <div className="absolute w-[1px] h-full bg-white/15"></div>
 
           <div
@@ -196,12 +169,9 @@ export default function Home() {
               transform: "translate(-50%, -50%)",
             }}
           />
-
         </div>
 
-        {/* LABELS */}
         <div className="flex flex-col justify-between h-64 text-[11px] tracking-[0.25em] text-right">
-
           {["HOME", "ABOUT", "VENTURES", "CONNECT"].map((label, i) => (
             <div
               key={i}
@@ -213,7 +183,21 @@ export default function Home() {
               {label}
             </div>
           ))}
+        </div>
 
+      </div>
+
+      {/* ================= MOBILE SCROLL INDICATOR ================= */}
+      <div className="md:hidden fixed bottom-8 right-6 z-20 flex items-center gap-2 opacity-80 mix-blend-difference">
+
+        <span className="text-[12px] tracking-[0.2em]">
+          SCROLL
+        </span>
+
+        {/* Arrow */}
+        <div className="flex flex-col items-center animate-bounce-slow">
+          <span className="w-[1px] h-4 bg-white"></span>
+          <span className="w-2 h-2 border-r border-b border-white rotate-45 -mt-1"></span>
         </div>
 
       </div>
@@ -231,6 +215,23 @@ export default function Home() {
       {[0, 1, 2, 3].map((i) => (
         <section key={i} className="h-screen snap-start"></section>
       ))}
+
+      <style jsx>{`
+      @keyframes bounceSlow {
+        0%, 100% {
+          transform: translateY(0);
+          opacity: 0.6;
+        }
+        50% {
+          transform: translateY(6px);
+          opacity: 1;
+        }
+      }
+
+      .animate-bounce-slow {
+        animation: bounceSlow 1.8s ease-in-out infinite;
+      }
+    `}</style>
 
     </main>
   );
