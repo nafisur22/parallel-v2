@@ -21,6 +21,7 @@ export default function Loader({ onFinish }) {
           alt="Parallel Logo"
           width={70}
           height={70}
+          style={{ width: 'auto', height: 'auto' }}
           priority
         />
       </div>

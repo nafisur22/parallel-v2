@@ -108,6 +108,7 @@ export default function Home() {
               alt="logo"
               width={500}
               height={500}
+              style={{ width: 'auto', height: 'auto' }}
               className="w-full h-auto opacity-90 transition-all duration-300 ease-out group-hover:opacity-100 group-hover:scale-[1.04]"
               priority
             />
