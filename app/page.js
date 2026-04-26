@@ -79,7 +79,7 @@ export default function Home() {
     >
       {/* CUSTOM CURSOR */}
       <div
-        className="fixed z-[999] pointer-events-none mix-blend-difference"
+        className="hidden md:block fixed z-[999] pointer-events-none mix-blend-difference"
         style={{
           left: cursor.x,
           top: cursor.y,
