@@ -10,17 +10,92 @@ export default function Home() {
   const [section, setSection] = useState(0);
   const [cursor, setCursor] = useState({ x: 0, y: 0 });
 
-  // Scroll detection
+  // Custom scroll handling with accumulator
   useEffect(() => {
-    const handleScroll = () => {
-      const vh = window.innerHeight;
-      const current = Math.round(window.scrollY / vh);
-      setSection(Math.min(current, 3));
+    let isScrolling = false;
+    let touchStartY = 0;
+    let touchEndY = 0;
+    let accumulatedScroll = 0;
+    let accumulatorTimeout = null;
+    let scrollTimeout = null;
+
+    const handleWheel = (e) => {
+      e.preventDefault();
+
+      if (isScrolling) return;
+
+      const scrollDelta = Math.abs(e.deltaY);
+      accumulatedScroll += scrollDelta;
+
+      clearTimeout(accumulatorTimeout);
+      accumulatorTimeout = setTimeout(() => {
+        accumulatedScroll = 0;
+      }, 200);
+
+      const threshold = 50;
+
+      if (accumulatedScroll >= threshold) {
+        const direction = e.deltaY > 0 ? 1 : -1;
+        const newSection = Math.min(Math.max(section + direction, 0), 3);
+
+        if (newSection !== section) {
+          isScrolling = true;
+          setSection(newSection);
+          scrollToSection(newSection);
+
+          scrollTimeout = setTimeout(() => {
+            isScrolling = false;
+            accumulatedScroll = 0;
+          }, 1500);
+        }
+      }
     };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+    const handleTouchStart = (e) => {
+      touchStartY = e.touches[0].clientY;
+    };
+
+    const handleTouchMove = (e) => {
+      e.preventDefault();
+    };
+
+    const handleTouchEnd = (e) => {
+      if (isScrolling) return;
+
+      touchEndY = e.changedTouches[0].clientY;
+      const swipeDistance = touchStartY - touchEndY;
+      const threshold = 50;
+
+      if (Math.abs(swipeDistance) > threshold) {
+        const direction = swipeDistance > 0 ? 1 : -1;
+        const newSection = Math.min(Math.max(section + direction, 0), 3);
+
+        if (newSection !== section) {
+          isScrolling = true;
+          setSection(newSection);
+          scrollToSection(newSection);
+
+          scrollTimeout = setTimeout(() => {
+            isScrolling = false;
+          }, 1500);
+        }
+      }
+    };
+
+    window.addEventListener("wheel", handleWheel, { passive: false });
+    window.addEventListener("touchstart", handleTouchStart, { passive: true });
+    window.addEventListener("touchmove", handleTouchMove, { passive: false });
+    window.addEventListener("touchend", handleTouchEnd, { passive: true });
+
+    return () => {
+      window.removeEventListener("wheel", handleWheel);
+      window.removeEventListener("touchstart", handleTouchStart);
+      window.removeEventListener("touchmove", handleTouchMove);
+      window.removeEventListener("touchend", handleTouchEnd);
+      if (scrollTimeout) clearTimeout(scrollTimeout);
+      if (accumulatorTimeout) clearTimeout(accumulatorTimeout);
+    };
+  }, [section]);
 
   // Fade after loader
   useEffect(() => {
