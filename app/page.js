@@ -113,6 +113,7 @@ export default function Home() {
   }, []);
 
   const scrollToSection = (index) => {
+    setSection(index);
     const vh = window.innerHeight;
     window.scrollTo({
       top: index * vh,
@@ -140,10 +141,19 @@ export default function Home() {
   const ventures = [
     "FEZA",
     "THE MARKER",
-    "MASALACHA",
+    "Lesson 5",
+    "Easy Pass",
+    "Valentine",
+    "Masalacha",
+    "Archer",
+    "Harbour Group",
+    "Arabyz Language",
+    "Property Koi",
     "VYKING",
     "JAO ABROAD",
+    "Eat The D*mn Cake",
     "ATNATION",
+    "Planet X Inc",
   ];
 
   return (
